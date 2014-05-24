@@ -1,0 +1,21 @@
+---
+layout: post
+title: "opw project"
+date: 2014-05-24 19:05:33 -0400
+comments: true
+categories: 
+---
+##OPW Project
+
+My project for the OPW internship will be to add support for a class of statistical functions in Ceilometer,
+Openstack's metering service. The functions I'm looking at are generally used when looking for trends over time, so
+things like moving averages and exponential smoothing. The initial 
+[blueprint](https://blueprints.launchpad.net/ceilometer/+spec/period-spanning-statistics)
+for implementing these functions envisioned using the current statistics API and working with already supported drivers: mongodb and sqlalchemy. 
+However, since the blueprint went out, there's been work on a new project [Gnocchi](https://wiki.openstack.org/wiki/Gnocchi) 
+(see [here](http://docs-draft.openstack.org/34/94834/9/gate/gate-telemetry-specs-docs/4654c39/doc/build/html/specs/gnocchi.html) as well), 
+which both sounds delicious and has an exciting goal, which is to rethink the way Ceilometer stores and aggregates metrics. 
+Right now the plan for Gnocchi is to implement data storage using Pandas and Swift; another option is to use a database optimized for time-series data, like 
+[InfluxDB](http://influxdb.com/). This project is pretty new, so there are a lot of details that need to be ironed out, but
+ultimately using Gnocchi will lead to better performance and scalability. My project has now shifted focus to looking at how to implement the 
+statistical functions, described in the blueprint, for Gnocchi.
