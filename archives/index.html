@@ -5,12 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="ja"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>A Malagon</title>
+  <title>Blog Archive - A Malagon</title>
   <meta name="author" content="A Malagon">
 
   
-  <meta name="description" content="I am a graduate student in physics at Yale; this summer I&rsquo;m excited to
-be doing an internship with Openstack through the Outreach Program for &hellip;">
+  <meta name="description" content=" Blog Archive 2014 first post
+May 24 2014 opw project
+May 24 2014 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +20,7 @@ be doing an internship with Openstack through the Outreach Program for &hellip;"
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://amalagon.github.io/">
+  <link rel="canonical" href="http://amalagon.github.io/archives/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="A Malagon" type="application/atom+xml">
@@ -60,122 +61,46 @@ be doing an internship with Openstack through the Outreach Program for &hellip;"
 </nav>
     <div id="main">
       <div id="content">
-        <div class="blog-index">
+        <div>
+<article role="article">
   
-  
-  
-    <article>
-      
   <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/24/first-post/">First Post</a></h1>
-    
-    
-      <div class="post-meta">
-        <p class="meta">
-          <span class="timestamp">- 
-
-
-
-
-
-
-
-
-  
-
-
-
-<time datetime="2014-05-24T19:31:15-04:00" pubdate data-updated="true">May 24<span>th</span>, 2014</time> -</span>
-          
-        </p>
-      </div>
+    <h1 class="entry-title"><a href="">Blog Archive</a></h1>
     
   </header>
+  
+  <div id="blog-archives">
 
 
-  <div class="entry-content"><p>I am a graduate student in physics at Yale; this summer I&rsquo;m excited to
-be doing an internship with Openstack through the <a href="https://gnome.org/opw/">Outreach Program for Women</a>.
-This blog will be describing the work I do for this internship, working on Ceilometer, Openstack&rsquo;s metering service.
-My Github code is <a href="https://github.com/amalagon">here</a> and you can email me
-at <a href="mailto:atmalagon@gmail.com">this address</a>.</p>
+
+  
+  <h2>2014</h2>
+
+<article>
+  
+<h1><a href="/blog/2014/05/24/first-post/">first post</a></h1>
+<time datetime="2014-05-24T19:31:15-04:00" pubdate><span class='month'>May</span> <span class='day'>24</span> <span class='year'>2014</span></time>
+
+
+</article>
+
+
+
+<article>
+  
+<h1><a href="/blog/2014/05/24/opw-project/">opw project</a></h1>
+<time datetime="2014-05-24T19:05:33-04:00" pubdate><span class='month'>May</span> <span class='day'>24</span> <span class='year'>2014</span></time>
+
+
+</article>
+
 </div>
-  
-  
-
-
-      <footer>
-      
-      - <a href="/blog/2014/05/24/first-post/">first post</a>
-      <time datetime="2014-05-24T19:31:15-04:00" pubdate><span class='month'>May</span> <span class='day'>24</span> <span class='year'>2014</span></time>
-      
-      </footer>
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/24/opw-project/">Opw Project</a></h1>
-    
-    
-      <div class="post-meta">
-        <p class="meta">
-          <span class="timestamp">- 
-
-
-
-
-
-
-
 
   
+</article>
 
 
-
-<time datetime="2014-05-24T19:05:33-04:00" pubdate data-updated="true">May 24<span>th</span>, 2014</time> -</span>
-          
-        </p>
-      </div>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>OPW Project</h2>
-
-<p>My project for the OPW internship will be to add support for a class of statistical functions in Ceilometer,
-Openstack&rsquo;s metering service. The functions I&rsquo;m looking at are generally used when looking for trends over time, so
-things like moving averages and exponential smoothing. The initial
-<a href="https://blueprints.launchpad.net/ceilometer/+spec/period-spanning-statistics">blueprint</a>
-for implementing these functions envisioned using the current statistics API and working with already supported drivers: mongodb and sqlalchemy.
-However, since the blueprint went out, there&rsquo;s been work on a new project <a href="https://wiki.openstack.org/wiki/Gnocchi">Gnocchi</a>
-(see <a href="http://docs-draft.openstack.org/34/94834/9/gate/gate-telemetry-specs-docs/4654c39/doc/build/html/specs/gnocchi.html">here</a> as well),
-which both sounds delicious and has an exciting goal, which is to rethink the way Ceilometer stores and aggregates metrics.
-Right now the plan for Gnocchi is to implement data storage using Pandas and Swift; another option is to use a database optimized for time-series data, like
-<a href="http://influxdb.com/">InfluxDB</a>. This project is pretty new, so there are a lot of details that need to be ironed out, but
-ultimately using Gnocchi will lead to better performance and scalability. My project has now shifted focus to looking at how to implement the
-statistical functions, described in the blueprint, for Gnocchi.</p>
 </div>
-  
-  
-
-
-      <footer>
-      
-      - <a href="/blog/2014/05/24/opw-project/">opw project</a>
-      <time datetime="2014-05-24T19:05:33-04:00" pubdate><span class='month'>May</span> <span class='day'>24</span> <span class='year'>2014</span></time>
-      
-      </footer>
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/archives">Blog Archives</a>
-    
-  </div><!-- /div.pagination -->
-</div><!-- /div.blog-index -->
 
       </div><!-- /div#content -->
     </div><!-- /div#main -->

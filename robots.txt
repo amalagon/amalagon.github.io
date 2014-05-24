@@ -1,4 +1,4 @@
 User-agent: *
-Disallow: 
+Disallow:
 
-Sitemap: http://amalagon.github.io/sitemap.xml 
+Sitemap: http://amalagon.github.io/sitemap.xml
