@@ -4,7 +4,7 @@
   <title><![CDATA[A Malagon]]></title>
   <link href="http://amalagon.github.io/atom.xml" rel="self"/>
   <link href="http://amalagon.github.io/"/>
-  <updated>2014-05-24T20:07:48-04:00</updated>
+  <updated>2014-05-24T20:15:06-04:00</updated>
   <id>http://amalagon.github.io/</id>
   <author>
     <name><![CDATA[A Malagon]]></name>
@@ -14,26 +14,31 @@
 
   
   <entry>
+    
     <title type="html"><![CDATA[first post]]></title>
     <link href="http://amalagon.github.io/blog/2014/05/24/first-post/"/>
+    
     <updated>2014-05-24T19:31:15-04:00</updated>
     <id>http://amalagon.github.io/blog/2014/05/24/first-post</id>
+    
     <content type="html"><![CDATA[<p>I am a graduate student in physics at Yale; this summer I&rsquo;m excited to
 be doing an internship with Openstack through the <a href="https://gnome.org/opw/">Outreach Program for Women</a>.
 This blog will be describing the work I do for this internship, working on Ceilometer, Openstack&rsquo;s metering service.
 My Github code is <a href="https://github.com/amalagon">here</a> and you can email me
 at <a href="mailto:atmalagon@gmail.com">this address</a>.</p>
 ]]></content>
+    
   </entry>
   
   <entry>
+    
     <title type="html"><![CDATA[opw project]]></title>
     <link href="http://amalagon.github.io/blog/2014/05/24/opw-project/"/>
+    
     <updated>2014-05-24T19:05:33-04:00</updated>
     <id>http://amalagon.github.io/blog/2014/05/24/opw-project</id>
-    <content type="html"><![CDATA[<h2>OPW Project</h2>
-
-<p>My project for the OPW internship will be to add support for a class of statistical functions in Ceilometer,
+    
+    <content type="html"><![CDATA[<p>My project for the OPW internship will be to add support for a class of statistical functions in Ceilometer,
 Openstack&rsquo;s metering service. The functions I&rsquo;m looking at are generally used when looking for trends over time, so
 things like moving averages and exponential smoothing. The initial
 <a href="https://blueprints.launchpad.net/ceilometer/+spec/period-spanning-statistics">blueprint</a>
@@ -46,6 +51,7 @@ Right now the plan for Gnocchi is to implement data storage using Pandas and Swi
 ultimately using Gnocchi will lead to better performance and scalability. My project has now shifted focus to looking at how to implement the
 statistical functions, described in the blueprint, for Gnocchi.</p>
 ]]></content>
+    
   </entry>
   
 </feed>

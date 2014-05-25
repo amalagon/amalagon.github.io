@@ -4,7 +4,7 @@
   <title><![CDATA[A Malagon]]></title>
   <link href="http://amalagon.github.io/atom.xml" rel="self"/>
   <link href="http://amalagon.github.io/"/>
-  <updated>2014-05-24T20:07:48-04:00</updated>
+  <updated>2014-05-24T20:15:06-04:00</updated>
   <id>http://amalagon.github.io/</id>
   <author>
     <name><![CDATA[A Malagon]]></name>
@@ -31,9 +31,7 @@ at <a href="mailto:atmalagon@gmail.com">this address</a>.</p>
     <link href="http://amalagon.github.io/blog/2014/05/24/opw-project/"/>
     <updated>2014-05-24T19:05:33-04:00</updated>
     <id>http://amalagon.github.io/blog/2014/05/24/opw-project</id>
-    <content type="html"><![CDATA[<h2>OPW Project</h2>
-
-<p>My project for the OPW internship will be to add support for a class of statistical functions in Ceilometer,
+    <content type="html"><![CDATA[<p>My project for the OPW internship will be to add support for a class of statistical functions in Ceilometer,
 Openstack&rsquo;s metering service. The functions I&rsquo;m looking at are generally used when looking for trends over time, so
 things like moving averages and exponential smoothing. The initial
 <a href="https://blueprints.launchpad.net/ceilometer/+spec/period-spanning-statistics">blueprint</a>
