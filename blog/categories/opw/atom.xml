@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[A Malagon]]></title>
-  <link href="http://amalagon.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: OPW | A Malagon]]></title>
+  <link href="http://amalagon.github.io/blog/categories/opw/atom.xml" rel="self"/>
   <link href="http://amalagon.github.io/"/>
   <updated>2014-07-09T09:28:47-04:00</updated>
   <id>http://amalagon.github.io/</id>
