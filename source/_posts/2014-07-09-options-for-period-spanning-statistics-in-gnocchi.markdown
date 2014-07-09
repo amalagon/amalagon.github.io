@@ -17,7 +17,7 @@ Start at the the timestamp specified by the user, and aggregate forward in time.
 
 B. Look-back
 
-Incorporate the values from k bins before the start timestamp specified by the user, where 2k+1 is the window size of the moving average; for EWMA look back to span bins. The exponentially weighted moving average command in Pandas takes an input parameter of span, and double exponential smoothing (Holt-Winters) takes input parameters span and beta. For both cases we can relate span to the usual input parameter a via span=2-a.
+Incorporate the values from k bins before the start timestamp specified by the user, where 2k+1 is the window size of the moving average; for EWMA look back to span bins. The exponentially weighted moving average command in Pandas takes an input parameter of span, and double exponential smoothing (Holt-Winters) takes input parameters span and beta. For both cases we can relate span to the usual input parameter alpha via span=(2-alpha)/alpha.
 
 Note: For the moving average statistic, if we only retain the aggregates and not raw data, we need to know the number of data points in each period (ie count needs to be available). If we retain all the data points, this is not necessary.
 
@@ -36,7 +36,7 @@ However, if you get some out of order timestamp that belongs in an older period,
 Queries: 
 Calculate the aggregation on demand without storing partial results. If we define the window size as the number of periods it spans, a query would look something like:
 
-	  GET /v1/entity/<UUID>/measures?start='2014-06-21 23:23:20’&stop='2014-06-22 23:23:20’&aggregation=ewma&span=20
+	GET /v1/entity/<UUID>/measures?start='2014-06-21 23:23:20’&stop='2014-06-22 23:23:20’&aggregation=ewma&span=20
 
 or
 
@@ -44,7 +44,7 @@ or
 
 or 
 
-   GET /v1/entity/<UUID>/measures?start='2014-06-21 23:23:20’&stop='2014-06-22 23:23:20’&aggregation=holtwinters&span=5&beta=.1
+	GET /v1/entity/<UUID>/measures?start='2014-06-21 23:23:20’&stop='2014-06-22 23:23:20’&aggregation=holtwinters&span=5&beta=.1
 
 Adding scoped names might be useful as well (ie aggregation.window, aggregation.beta)
 
@@ -62,15 +62,22 @@ Whatever you decide to implement, be explicit in the documentation about whether
 
 In general, Strategy A of no prior history is simpler than Strategy B of taking old bins into account. In Strategy B you have to do more checking to see if the old bins aren’t expired, etc. Probably easiest to do Strategy A.
 
-Right now the period-spanning statistics need the mean and count of each period. Since you can re-adjust the mean of a bin when you add new points in that time bucket by doing (old-mean*old-count+new-value)/(old-count+1)
-really what Moving Average is doing to calculate the moving average over 3 periods is:
+Right now the period-spanning statistics need the mean and count of each period. Since you can re-adjust the mean of a bin when you add new points in that time bucket by doing 
+
+(old-mean*old-count+new-value)/(old-count+1)
+
+Really what Moving Average is doing to calculate the moving average over 3 periods is:
+
 MovingAverage(3 bins)=(mean1*count1+mean2*count2+mean3*count3)/(count1+count2+count3)
+
 so you don’t have to retain all data points, just the mean and count (which can be updated correctly even if new timepoints come in for old buckets).
 
-of course if you retained all the data points, it would be eqiuvalent to do
+Of course if you retained all the data points, it would be equivalent to do
+
 MovingAverage(3 bins) = Sum(values in 3 bins wide interval)/Number of points
 
 Notice that for count1=count2=count3the moving average is equal to the average of the averages:
+
 MovingAverage(3bins) = (mean1+mean2+mean3)/3
 
 In the end, it comes down to what the data is expected to look like. If you expect almost uniform sampling, then taking the average of averages should be good enough. If however, you expect 300 bins in one period and 2 in another and hugely noisy data...I can’t say for sure that the average of averages is worthless, but I think in most cases it would be a worse estimate of the mean of the k bins than when weighting by count.
@@ -78,9 +85,9 @@ In the end, it comes down to what the data is expected to look like. If you expe
 The EWMA is a bit trickier. Technically what we are doing here is an exponential smooth over the mean values of the bins (if all we retain are the mean/count). E.g.:
 
 EWMA(1stbin)=mean1
-EWMA(2ndbin)=(1-)EWMA(1stbin)+*mean2
+EWMA(2ndbin)=(1-alpha)EWMA(1stbin)+alpha*mean2
 etc...
-where =2/(1+span)
+where alpha =2/(1+span)
 
 In order to do an EWMA on the raw data, you do need all the data points to be retained.
 
@@ -96,7 +103,7 @@ Functions Defined:
 Just to define what we mean here, the output of a moving average reads:
 y[n] = 1/(2k+1)*sum(x[n-k:n+k+1]) 
 
-where the odd number 2k+1is the window size and x[t]the input array (in our case, each element in x corresponds to the mean*count of a period). Increasing the window size increases the smoothing effect.. In Pandas the moving average syntax is:
+where the odd number 2k+1is the window size and x[t]the input array (in our case, each element in x corresponds to the mean*count of a period). Increasing the window size increases the smoothing effect. In Pandas the moving average syntax is:
 y = pandas.rolling_mean(x, window_size, center=True)
 
 If we retain all datapoints, we can call pd.rolling_mean on the raw data. If we are doing roll-up, you can’t use this syntax, but need to implement a moving_average that takes as input arrays mean, count corresponding to the periods being looked at:
@@ -111,4 +118,4 @@ y = pandas.ewma(x, com= (1-alpha)/alpha)
 or
 y = pandas.ewma(x, span = (2-alpha)/alpha)
 
-As pandas.ewma takes in spanas a parameter, rather than , it is perhaps clearer to say that =2/(1+span).is a smoothing parameter between 0 and 1; for small , weights decay quickly for old data points and they “fall off” in affecting the forecast. For large , weights decay more slowly and many data points contribute to the forecast.
+As pandas.ewma takes in span as a parameter, rather than alpha, it is perhaps clearer to say that alpha=2/(1+span).alpha is a smoothing parameter between 0 and 1; for small alpha, weights decay quickly for old data points and they “fall off” in affecting the forecast. For large alpha, weights decay more slowly and many data points contribute to the forecast.
