@@ -1,0 +1,48 @@
+---
+layout: post
+title: "Notes on Gnocchi"
+date: 2014-06-23 05:14:38 -0400
+comments: false
+categories: 
+---
+
+Documentation that's been helpful to read so far:
+[Pecan](http://pecan.readthedocs.org/en/latest/routing.html#exposing-controllers)
+[Voluptuous]
+[Gnocchi source-code walkthrough](https://plus.google.com/events/ci928omo7od91c2q2c9iii58aig)
+
+Learning about config files: different connection strings for different database implementations (mysql, postgresql).
+ 
+Code Academy API tutorials.
+[Requests library](http://docs.python-requests.org/en/latest/)
+[Pandas resampling]
+[Pandas data structures](http://www.gregreda.com/2013/10/26/intro-to-pandas-data-structures/)
+[Postgresql documentation]
+
+[Pulling a patch to review]
+What I understand about Gnocchi so far:
+[Rst primer](http://sphinx-doc.org/rest.html#rst-primer)
+
+SHOWTREEHERE
+
+Gnocchi is split up into the rest folder, which has the functions that control the api, the storage folder, and the indexer folder, which contains the driver information for swift. 
+
+The storage driver stores the timestamps and values, the indexer stores the databout the resource and entity. Carbonara is the library that implements the time series manipulation. The __init__ files hold most of the important information.
+
+Status of Project to implement period-spanning statistics:
+
+Implementing moving averages, etc, a
+
+Making a python-gnocchiclient:
+
+... work in progress ...
+
+Miscellaneous useful commands: 
+
+using sed for string transforms
+key bindings for going through the command line quickly (Ctrl+a, Ctrl+e, Ctrl+k)
+Doing grep recursively
+When etherpad freezes how to recover files (add /export.txt to end of url to get the content in a txt file)
+running commands in the background (use ampersand)
+Using restview to view .rst files
+Finding the id of a running process: ps -ef | grep 'gnocchi'

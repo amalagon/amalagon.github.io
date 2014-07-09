@@ -9,11 +9,8 @@ article {
     background: $img-border bottom left repeat-x;
     h1 {
       margin: 0;
-      a {
-        &:hover {
-          color: $link-color-hover
-        }
-      }
+      a { text-decoration: none;
+        &:hover { text-decoration: underline; } }
     }
     p {
       font-size: .9em;
@@ -21,8 +18,8 @@ article {
       margin: 0;
       &.meta {
         @extend .sans;
-        // text-transform: uppercase;
-        // position: absolute; top: 0;
+        text-transform: uppercase;
+        position: absolute; top: 0;
       }
     }
     @media only screen and (min-width: 768px) {
@@ -31,36 +28,9 @@ article {
       background: $img-border bottom left repeat-x;
     }
   }
-  h1 a {
-    border-bottom: dashed 2px $light-blue;
-    line-height: 1.5;
-    &:hover {
-      text-decoration: none;
-    }
-  }
-  .entry-content {
-    h2 {
-      &:before, &:after {
-        display: block;
-        content: '';
-        height: 1px;
-        @include linear-gradient(left, lighten($light-blue, 80),
-                                       lighten($light-blue, 30),
-                                       lighten($light-blue, 80));
-      }
-      &:before {
-        margin-bottom: 0.4em;
-      }
-      &:after {
-        margin-top: 0.4em;
-      }
-      margin-top: 1.2em;
-      text-align: center;
-    }
-    h3 {
-      border-left: solid 3px lighten($light-blue, 10);
-      padding: 0 0 0 0.5em;
-    }
+  h2 {
+    padding-top: 0.8em;
+    background: $img-border top left repeat-x;
   }
   .entry-content & h2:first-child, header + h2 { padding-top: 0; }
   h2:first-child, header + h2 { background: none; }
@@ -72,7 +42,6 @@ article {
     font-size: 2.0em; font-style: italic;
     line-height: 1.3em;
   }
-
   img, video, .flash-video {
     @extend .flex-content;
     @extend .basic-alignment;
@@ -113,7 +82,6 @@ article {
   }
 
 }
-
 article + article {
   .blog-index & {
     background: $img-border top left repeat-x;
@@ -122,34 +90,23 @@ article + article {
 #content .blog-index {
   padding: { top: 0; bottom: 0; }
   article { padding-top: 2em; }
-  article header { padding-bottom: 0; }
+  article header { background: none; padding-bottom: 0; }
   article h1 {
-    font-size: 1.6em;
+    font-size: 2.2em;
     a { color: inherit; &:hover { color: $link-color-hover; } }
   }
   a[rel=full-article] {
-    background: darken($main-bg, 5);
     display: inline-block;
-    padding: .4em .8em;
     margin-right: .5em;
     text-decoration: none;
     color: mix($text-color, $text-color-light);
-    @extend .serif;
-    @include transition(background-color .5s);
-    &:hover {
-      background: $link-color-hover;
-      text-shadow: none;
-      color: $main-bg;
-    }
+	@extend .sans;
+	font-weight: 100;
+	font-size: 1.5em;
   }
   footer {
     @extend .sans;
     margin-top: 1em;
-  }
-  article footer {
-    @include white-box();
-    text-align: right;
-    padding: 5px;
   }
 }
 
@@ -176,23 +133,3 @@ article + article {
     }
   }
 }
-
-#content h1 a {
-  color: $text-color;
-}
-
-
-.meta {
-  color: #aaa;
-}
-
-.post-meta {
-  text-align: center;
-  margin-top: 10px;
-  font-size: 0.9em;
-  font-weight: 200;
-  font-style: italic;
-  letter-spacing: 6px;
-  letter-spacing: 0.6em;
-}
-

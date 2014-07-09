@@ -1,17 +1,12 @@
-@import url(http://fonts.googleapis.com/css?family=Josefin+Sans);
-@import url(http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic);
-@import url(http://fonts.googleapis.com/css?family=Open+Sans);
-
 $blockquote: $type-border !default;
-
-// Fonts
-$sans: "Open Sans","Helvetica Neue", Arial, sans-serif !default;
+$sans: "Helvetica Neue", Arial, sans-serif !default;
 $serif: "PT Serif", Georgia, Times, "Times New Roman", serif !default;
 $mono: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace !default;
-$heading-font-family: "Josefin Sans", "Georgia", "Helvetica Neue", Arial, sans-serif !default;
+$heading-font-family: "PT Serif", "Georgia", "Helvetica Neue", Arial, sans-serif !default;
 $header-title-font-family: $heading-font-family !default;
-$header-subtitle-font-family: $serif !default;
+$header-subtitle-font-family: $heading-font-family !default;
 
+// Fonts
 .heading {
   font-family: $heading-font-family;
 }
@@ -19,20 +14,21 @@ $header-subtitle-font-family: $serif !default;
 .serif { font-family: $serif; }
 .mono { font-family: $mono; }
 
-body header h1 {
-  font-size: 2.3em;
-  font-style: italic;
+body > header h1 {
+  font-size: 2.2em;
   @extend .heading;
   font-family: $header-title-font-family;
   font-weight: normal;
   line-height: 1.2em;
+  margin-bottom: 0.6667em;
 }
-body header h2 {
+body > header h2 {
   font-family: $header-subtitle-font-family;
 }
 
 body {
   line-height: 1.5em;
+  letter-spacing: 1px;
   color: $text-color;
   @extend .serif;
 }
@@ -50,24 +46,22 @@ h1 {
   @extend .heading;
   text-rendering: optimizelegibility;
   margin-bottom: 1em;
+  font-weight: bold;
 }
 h2, section h1 {
-  font-size: 1.6em;
+  font-size: 1.5em;
 }
 h3, section h2, section section h1 {
   font-size: 1.3em;
 }
 h4, section h3, section section h2, section section section h1 {
   font-size: 1em;
-  font-weight: bold;
 }
 h5, section h4, section section h3 {
   font-size: .9em;
-  font-weight: bold;
 }
 h6, section h5, section section h4, section section section h3 {
   font-size: .8em;
-  font-weight: bold;
 }
 
 p, article blockquote, ul, ol { margin-bottom: 1.5em; }
@@ -108,15 +102,7 @@ pre, code, tt { @extend .mono; }
 
 sub, sup { line-height: 0; }
 
-hr {
-  border: 0;
-  height: 1px;
-  background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
-  background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
-  background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
-  background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
-  margin-bottom: 1.0em;
-}
+hr { margin-bottom: 0.2em; }
 
 small { font-size: .8em; }
 
@@ -124,16 +110,16 @@ big { font-size: 1.2em; }
 
 article blockquote {
   $bq-margin: 1.2em;
+  font-style: italic;
   position: relative;
   font-size: 1.2em;
   line-height: 1.5em;
   padding-left: 1em;
   border-left: 4px solid rgba($text-color-light, .5);
-  // @include white-box();
   cite {
     font-style: italic;
     a { color: $text-color-light !important; word-wrap: break-word; }
-    // &:before { content: '\2014'; padding:{right: .3em; left: .3em;} color: $text-color-light; }
+    &:before { content: '\2014'; padding:{right: .3em; left: .3em;} color: $text-color-light; }
   }
   @media only screen and (min-width: 992px) {
     padding-left: 1.5em;

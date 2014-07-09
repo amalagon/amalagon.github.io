@@ -3,7 +3,7 @@ layout: post
 title: "opw project"
 date: 2014-05-24 19:05:33 -0400
 comments: false
-categories: [OPW, Openstack] 
+categories: 
 ---
 
 My project for the OPW internship will be to add support for a class of statistical functions in Ceilometer,

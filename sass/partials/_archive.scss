@@ -18,12 +18,9 @@
     a {
       @include hover-link;
       color: inherit;
-      &:hover {
-        color: $link-color-hover;
-        text-decoration: none;
-      }
+      &:hover { color: $link-color-hover; }
       font-weight: normal;
-      // display: inline-block;
+      display: inline-block;
     }
   }
   a.category, time {
