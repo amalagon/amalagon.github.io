@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Openstack | A Malagon]]></title>
   <link href="http://amalagon.github.io/blog/categories/openstack/atom.xml" rel="self"/>
   <link href="http://amalagon.github.io/"/>
-  <updated>2014-07-09T09:28:47-04:00</updated>
+  <updated>2014-07-28T02:18:12-04:00</updated>
   <id>http://amalagon.github.io/</id>
   <author>
     <name><![CDATA[A Malagon]]></name>
@@ -12,6 +12,132 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Notes on Stevedore]]></title>
+    <link href="http://amalagon.github.io/blog/2014/07/25/notes-on-stevedore/"/>
+    <updated>2014-07-25T15:41:28-04:00</updated>
+    <id>http://amalagon.github.io/blog/2014/07/25/notes-on-stevedore</id>
+    <content type="html"><![CDATA[<p>This is mostly taken from the very helpful <a href="stevedore.readthedocs.org/en/latest/tutorial/creating_plugins.html">documentation</a> on Stevedore; when I
+started working on Gnocchi I found myself wondering a lot about the functions
+of two modules in particular, stevedore and pecan. The other day I needed
+to use stevedore to load a plugin and so finally had the chance to use it in
+practice. These are some notes from the process  &ndash; hopefully they can be useful
+for someone needing to use stevedore for the first time.</p>
+
+<p>So my basic understanding of stevedore is that it is used for managing plugins, or pieces of code that you want to load into an application. The manager classes work with plugins defined through entry points to load and enable the code.</p>
+
+<p>In practice, this is what the process looks like:</p>
+
+<ul>
+<li>Create a plugin</li>
+</ul>
+
+
+<p>The documentation, which is authored by Doug Hellman I believe, recommends making a base class with the abc module, as good API practice. In my case, I wanted to make a class that would calculate the moving average of some data. So my base class, defined in the init file of my directory (/gnocchi/statistics) looked like this:</p>
+
+<pre><code>import abc
+import six
+
+@six.add_metaclass(abc.ABCMeta)
+class CustomStatistics(object):
+
+    @abc.abstractmethod
+    def compute(data):
+    '''Returns the custom statistic of the data.'''
+</code></pre>
+
+<p>The code is implemented in the class MovingAverage (/gnocchi/statistics/moving_statistics.py):</p>
+
+<pre><code>from gnocchi import statistics
+
+class MovingAverage(statistics.CustomStatistics):
+
+  def compute(self, data):
+      ... do stuff ...
+      return averaged_data
+</code></pre>
+
+<ul>
+<li>Create the entry point</li>
+</ul>
+
+
+<p>The next step is to define an entry point for the code in your setup.cfg file. The entry point format for the syntax is</p>
+
+<pre><code>plugin_namespace=
+ name = module.path:thing_you_want_to_import_from_the_module
+</code></pre>
+
+<p>so I had</p>
+
+<pre><code>[entry_points]
+gnocchi.statistics =
+    moving-average = gnocchi.statistics.moving_statistics:MovingAverage
+</code></pre>
+
+<p>The stevedore documentation on <a href="stevedore.readthedocs.org/en/latest/tutorial/creating_plugins.html">registering plugins</a> has more information on how to package a library in general usng setuptools.</p>
+
+<ul>
+<li>Load the Plugins</li>
+</ul>
+
+
+<p>You can either use drivers, hooks, or the extensions pattern to load your plugins. I ended up starting with drivers and then moving to extensions.
+The difference between them is whether
+you want to load a single plugin (use drivers) or multiple plugins at a time (extensions). I believe hooks also allows you to load many plugins at once but is meant to be used for multiple entry points with the same name. This allows you to invoke several functions with a single call&hellip;that&rsquo;s about the limit of my knowledge on hooks.</p>
+
+<p>The syntax for a driver is the following:</p>
+
+<pre><code>from stevedore import driver
+
+mgr = driver.DriverManager(
+    namespace='gnocchi.statistics',
+    name='moving-average',
+    invoke_on_load=True,
+)
+
+output  = mgr.driver.compute(data)
+</code></pre>
+
+<p>The invoke_on_load argument lets you call the object when loaded. Here the object is an instance of the MovingAverage class. You access it with the driver property and then call the methods (in this case, compute). You can also pass in arguments in DriverManager; see the documentation for more detail.</p>
+
+<p>I ended up going with extensions instead of drivers, as there were multiple statistical functions I had as plugins and I wanted to load all the entry points at once. The syntax is then</p>
+
+<pre><code>  from stevedore import extension
+
+  mgr = extension.ExtensionManager(
+      namespace = 'gnocchi.statistics',
+      invoke_on_load=True
+  )
+</code></pre>
+
+<p>This loads all of the plugins in the namespace.
+In my case I wanted to make a dictionary of all the function names and the
+extension objects so I did:</p>
+
+<pre><code>configured_statistics = dict((x.name, x.obj) for x in mgr)
+</code></pre>
+
+<p>When a GET request to Gnocchi had a query for computing statistics on the data, the dict was consulted to see if there was a match with a configured statistics function name. If so, the extension object was called with the compute() method.</p>
+
+<pre><code> output = configured_statistics[user_query].compute(data)
+</code></pre>
+
+<p>The documentation shows an example using map() to call all the plugins. For the code below results would be a sequence of function names and the resulting data once the statistic is applied :</p>
+
+<pre><code>def compute_data(ext, data):
+    return (ext.name, ext.obj.compute(data))
+
+results = mgr.map(compute_data, data)
+</code></pre>
+
+<p>If you need the order to matter when loading the extension objects, you can
+use NamedExtensionManager.</p>
+
+<p>That&rsquo;s about it for my notes on stevedore &ndash; it&rsquo;s a clean, well-designed module and I&rsquo;m glad I got to learn about it.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Options for Period-Spanning Statistics in Gnocchi]]></title>
