@@ -1,0 +1,107 @@
+---
+layout: post
+title: "Notes on Stevedore"
+date: 2014-07-25 15:41:28 -0400
+comments: false
+categories: [Openstack, OPW] 
+---
+
+This is mostly taken from the very helpful [documentation](stevedore.readthedocs.org/en/latest/tutorial/creating_plugins.html) on Stevedore; when I
+started working on Gnocchi I found myself wondering a lot about the functions 
+of two modules in particular, stevedore and pecan. The other day I needed
+to use stevedore to load a plugin and so finally had the chance to use it in
+practice. These are some notes from the process  - hopefully they can be useful
+for someone needing to use stevedore for the first time.
+
+So my basic understanding of stevedore is that it is used for managing plugins, or pieces of code that you want to load into an application. The manager classes work with plugins defined through entry points to load and enable the code.
+ 
+In practice, this is what the process looks like:
+
+- Create a plugin
+
+The documentation, which is authored by Doug Hellman I believe, recommends making a base class with the abc module, as good API practice. In my case, I wanted to make a class that would calculate the moving average of some data. So my base class, defined in the init file of my directory (/gnocchi/statistics) looked like this:
+
+    import abc
+    import six
+
+    @six.add_metaclass(abc.ABCMeta)
+    class CustomStatistics(object):
+        
+        @abc.abstractmethod
+        def compute(data):
+	    '''Returns the custom statistic of the data.'''
+
+The code is implemented in the class MovingAverage (/gnocchi/statistics/moving_statistics.py):
+
+    from gnocchi import statistics
+
+    class MovingAverage(statistics.CustomStatistics):
+      
+      def compute(self, data):
+      	  ... do stuff ...
+      	  return averaged_data
+
+- Create the entry point
+
+The next step is to define an entry point for the code in your setup.cfg file. The entry point format for the syntax is
+    plugin_namespace=
+	 name = module.path:thing_you_want_to_import_from_the_module
+
+so I had
+
+    [entry_points]
+    gnocchi.statistics =
+        moving-average = gnocchi.statistics.moving_statistics:MovingAverage
+
+The stevedore documentation on [registering plugins](stevedore.readthedocs.org/en/latest/tutorial/creating_plugins.html) has more information on how to package a library in general usng setuptools.
+
+-  Load the Plugins
+
+You can either use drivers, hooks, or the extensions pattern to load your plugins. I ended up starting with drivers and then moving to extensions. 
+The difference between them is whether
+you want to load a single plugin (use drivers) or multiple plugins at a time (extensions). I believe hooks also allows you to load many plugins at once but is meant to be used for multiple entry points with the same name. This allows you to invoke several functions with a single call...that's about the limit of my knowledge on hooks. 
+
+The syntax for a driver is the following:
+
+    from stevedore import driver
+
+    mgr = driver.DriverManager(
+    	namespace='gnocchi.statistics',
+        name='moving-average',
+    	invoke_on_load=True,
+	)
+
+    output  = mgr.driver.compute(data)
+
+The invoke_on_load argument lets you call the object when loaded. Here the object is an instance of the MovingAverage class. You access it with the driver property and then call the methods (in this case, compute). You can also pass in arguments in DriverManager; see the documentation for more detail.
+
+I ended up going with extensions instead of drivers, as there were multiple statistical functions I had as plugins and I wanted to load all the entry points at once. The syntax is then
+
+      from stevedore import extension
+
+      mgr = extension.ExtensionManager(
+      	  namespace = 'gnocchi.statistics',
+    	  invoke_on_load=True
+	  )
+
+This loads all of the plugins in the namespace. 
+In my case I wanted to make a dictionary of all the function names and the
+extension objects so I did:
+
+    configured_statistics = dict((x.name, x.obj) for x in mgr)
+
+When a GET request to Gnocchi had a query for computing statistics on the data, the dict was consulted to see if there was a match with a configured statistics function name. If so, the extension object was called with the compute() method. 
+
+     output = configured_statistics[user_query].compute(data)
+
+The documentation shows an example using map() to call all the plugins. For the code below results would be a sequence of function names and the resulting data once the statistic is applied :
+
+    def compute_data(ext, data):
+        return (ext.name, ext.obj.compute(data))
+    
+    results = mgr.map(compute_data, data)
+
+If you need the order to matter when loading the extension objects, you can
+use NamedExtensionManager.
+
+That's about it for my notes on stevedore - it's a clean, well-designed module and I'm glad I got to learn about it. 
