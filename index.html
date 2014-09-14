@@ -9,8 +9,8 @@
   <meta name="author" content="A Malagon">
 
   
-  <meta name="description" content="This is mostly taken from the very helpful documentation on Stevedore; when I
-started working on Gnocchi I found myself wondering a lot about the &hellip;">
+  <meta name="description" content="Like the title says, this post is a collection of links to resources that I found helpful for
+learning about Gnocchi. Julien Danjou&rsquo;s blog post &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +65,70 @@ started working on Gnocchi I found myself wondering a lot about the &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+  
+    
+      <h1 class="entry-title"><a href="/blog/2014/09/14/miscellaneous-on-gnocchi/">Miscellaneous Resources on Gnocchi</a></h1>
+      
+      
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-14T13:33:23-04:00" pubdate data-updated="true">Sep 14<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Like the title says, this post is a collection of links to resources that I found helpful for
+learning about Gnocchi.</p>
+
+<ul>
+<li><p>Julien Danjou&rsquo;s <a href="https://julien.danjou.info/blog/2014/openstack-ceilometer-the-gnocchi-experiment">blog post</a>
+about Gnocchi is the most recent of the links here and an excellent summary of all things Gnocchi. It explains the limitations of the previous API
+in Ceilometer and describes how the current implementation (using Pandas/Swift) was chosen.
+I found the diagrams useful for understanding the relationship between entities and resources.
+The post expands on the information given in the <a href="https://wiki.openstack.org/wiki/Gnocchi">wiki</a>, also a good reference.</p></li>
+<li><p>Julien also did a <a href="https://plus.google.com/events/ci928omo7od91c2q2c9iii58aig">walkthrough</a> of the Gnocchi source code:
+very helpful for navigating the different parts of the project.</p></li>
+<li><p>Gnocchi <a href="https://github.com/openstack/ceilometer-specs/blob/master/specs/juno/gnocchi.rst">specs</a>
+(I referred to this primarily for examples of the HTTP request syntax). If you look through the history, you can see the shift
+in approach to retention policies &ndash; the timeseries length goes from being defined in terms of number of points
+to being defined in terms of a lifespan.</p></li>
+<li><p>Eoghan Glynn&rsquo;s <a href="http://lists.openstack.org/pipermail/openstack-dev/2014-August/042080.html">thread</a> on the Openstack
+mailing lists clearly outlines the differences between Gnocchi and timeseries-oriented databases (like InfluxDB).
+It goes over the features of InfluxDB that make it a good backend option for Gnocchi though, such
+as the downsampling and retention policies.</p></li>
+<li><p>The Gnocchi <a href="https://github.com/stackforge/gnocchi/tree/master/gnocchi">repository</a>.</p></li>
+</ul>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/09/14/miscellaneous-on-gnocchi/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -482,6 +546,10 @@ ultimately using Gnocchi will lead to better performance and scalability. My pro
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/09/14/miscellaneous-on-gnocchi/">Miscellaneous Resources on Gnocchi</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/07/25/notes-on-stevedore/">Notes on Stevedore</a>

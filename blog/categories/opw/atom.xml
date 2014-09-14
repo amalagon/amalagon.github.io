@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OPW | A Malagon]]></title>
   <link href="http://amalagon.github.io/blog/categories/opw/atom.xml" rel="self"/>
   <link href="http://amalagon.github.io/"/>
-  <updated>2014-07-28T02:18:12-04:00</updated>
+  <updated>2014-09-14T17:41:31-04:00</updated>
   <id>http://amalagon.github.io/</id>
   <author>
     <name><![CDATA[A Malagon]]></name>
@@ -12,6 +12,97 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Miscellaneous Resources on Gnocchi]]></title>
+    <link href="http://amalagon.github.io/blog/2014/09/14/miscellaneous-on-gnocchi/"/>
+    <updated>2014-09-14T13:33:23-04:00</updated>
+    <id>http://amalagon.github.io/blog/2014/09/14/miscellaneous-on-gnocchi</id>
+    <content type="html"><![CDATA[<p>Like the title says, this post is a collection of links to resources that I found helpful for
+learning about Gnocchi.</p>
+
+<ul>
+<li><p>Julien Danjou&rsquo;s <a href="https://julien.danjou.info/blog/2014/openstack-ceilometer-the-gnocchi-experiment">blog post</a>
+about Gnocchi is the most recent of the links here and an excellent summary of all things Gnocchi. It explains the limitations of the previous API
+in Ceilometer and describes how the current implementation (using Pandas/Swift) was chosen.
+I found the diagrams useful for understanding the relationship between entities and resources.
+The post expands on the information given in the <a href="https://wiki.openstack.org/wiki/Gnocchi">wiki</a>, also a good reference.</p></li>
+<li><p>Julien also did a <a href="https://plus.google.com/events/ci928omo7od91c2q2c9iii58aig">walkthrough</a> of the Gnocchi source code:
+very helpful for navigating the different parts of the project.</p></li>
+<li><p>Gnocchi <a href="https://github.com/openstack/ceilometer-specs/blob/master/specs/juno/gnocchi.rst">specs</a>
+(I referred to this primarily for examples of the HTTP request syntax). If you look through the history, you can see the shift
+in approach to retention policies &ndash; the timeseries length goes from being defined in terms of number of points
+to being defined in terms of a lifespan.</p></li>
+<li><p>Eoghan Glynn&rsquo;s <a href="http://lists.openstack.org/pipermail/openstack-dev/2014-August/042080.html">thread</a> on the Openstack
+mailing lists clearly outlines the differences between Gnocchi and timeseries-oriented databases (like InfluxDB).
+It goes over the features of InfluxDB that make it a good backend option for Gnocchi though, such
+as the downsampling and retention policies.</p></li>
+<li><p>The Gnocchi <a href="https://github.com/stackforge/gnocchi/tree/master/gnocchi">repository</a>.</p></li>
+</ul>
+
+
+<!-- more -->
+
+
+<p>Finally, I am also adding some old notes I made when first trying to understand the Gnocchi source code. I found it helpful to visually
+map out the filesystem structure (shown below) with comments on the different functional parts underneath.
+The diagram is not up to date and shows only the sections I was most familiar with.
+Although the comments below are rather simplistic and a bit embarrassing in retrospect,
+I thought I would post this in case a future OPW intern wants to know how other people
+approached their projects.</p>
+
+<pre><code>gnocchi/gnocchi/
+|--- carbonara.py
+|--- cli.py
+|--- indexer/
+|   |--- __init__.py
+|   |--- null.py
+|   |--- sqlalchemy.py
+|--- __init__.py
+|--- openstack/
+|--- rest/
+|   |--- app.py
+|   |--- __init__.py
+|--- service.py
+|--- storage/
+|   |--- __init__.py
+|   |--- null.py
+|   |--- swift.py
+|--- tests/
+|   |--- __init__.py
+|   |--- test_carbonara.py
+|   |--- test_indexer.py
+|   |--- test_rest.py
+|   |--- test_storage.py
+|--- gnocchi.egg-info
+|--- openstack-common.conf
+|--- README.rst
+|--- requirements.txt
+|--- run-mysql-tests.sh
+|--- run-postgresql-tests.sh
+|--- run-tests.sh
+|--- setup.cfg
+|--- setup.py
+</code></pre>
+
+<ul>
+<li><p>carbonara.py is the library that manipulates the timeseries. It is used in conjunction with the Swift storage driver.</p></li>
+<li><p>rest/ &ndash; I spent a lot of time here, mostly in the EntityController get_measures section of the init file, which
+has the code for evaluating HTTP requests to the API. The app.py file uses pecan magic to create hooks
+for the configured storage drivers and indexers. It also sets the default port for the API.</p></li>
+<li><p>storage/ &ndash; also looked at these files a lot when starting out. The driver-specific code is contained here. Eoghan Glynn added support for
+InfluxDB in this <a href="https://review.openstack.org/#/c/103329/">patch</a>; Dina Belova added OpenTSDB <a href="https://review.openstack.org/#/c/107986/">support</a>.
+As it was desirable to make the custom aggregation functions driver-independent, no changes were made to these files. However, it was useful
+to look at the InfluxDB patch to get a sense of the way aggregation was implemented using that backend.</p></li>
+<li><p>tests/ &ndash; The second most helpful thing in understanding the code (other than actually running the API and seeing query results, as well as logging intermediate steps in debug mode) was to look at the test cases.</p></li>
+<li><p>README.rst &ndash; I think this was my first contribution. Eoghan suggested it as a first step and it was a great way for getting my feet wet.</p></li>
+<li><p>setup.cfg &ndash; modify this file to add entry points for custom aggregation functions, storage drivers, and indexer options.</p></li>
+</ul>
+
+
+<p>That&rsquo;s all I have for comments on the Gnocchi source code &ndash; thanks for reading!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Notes on Stevedore]]></title>

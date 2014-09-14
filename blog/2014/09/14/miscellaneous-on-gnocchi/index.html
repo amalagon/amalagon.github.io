@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Miscellaneous Resources on Gnocchi - A Malagon</title>
+  <meta name="author" content="A Malagon">
+
+  
+  <meta name="description" content="Like the title says, this post is a collection of links to resources that I found helpful for
+learning about Gnocchi. Julien Danjou&rsquo;s blog post &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://amalagon.github.io/blog/2014/09/14/miscellaneous-on-gnocchi">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="A Malagon" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner">
+	<div class="header-title"><a href="/">A Malagon</a></div>
+
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:amalagon.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+  
+    
+      <h1 class="entry-title">Miscellaneous Resources on Gnocchi</h1>
+    
+  
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-14T13:33:23-04:00" pubdate data-updated="true">Sep 14<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Like the title says, this post is a collection of links to resources that I found helpful for
+learning about Gnocchi.</p>
+
+<ul>
+<li><p>Julien Danjou&rsquo;s <a href="https://julien.danjou.info/blog/2014/openstack-ceilometer-the-gnocchi-experiment">blog post</a>
+about Gnocchi is the most recent of the links here and an excellent summary of all things Gnocchi. It explains the limitations of the previous API
+in Ceilometer and describes how the current implementation (using Pandas/Swift) was chosen.
+I found the diagrams useful for understanding the relationship between entities and resources.
+The post expands on the information given in the <a href="https://wiki.openstack.org/wiki/Gnocchi">wiki</a>, also a good reference.</p></li>
+<li><p>Julien also did a <a href="https://plus.google.com/events/ci928omo7od91c2q2c9iii58aig">walkthrough</a> of the Gnocchi source code:
+very helpful for navigating the different parts of the project.</p></li>
+<li><p>Gnocchi <a href="https://github.com/openstack/ceilometer-specs/blob/master/specs/juno/gnocchi.rst">specs</a>
+(I referred to this primarily for examples of the HTTP request syntax). If you look through the history, you can see the shift
+in approach to retention policies &ndash; the timeseries length goes from being defined in terms of number of points
+to being defined in terms of a lifespan.</p></li>
+<li><p>Eoghan Glynn&rsquo;s <a href="http://lists.openstack.org/pipermail/openstack-dev/2014-August/042080.html">thread</a> on the Openstack
+mailing lists clearly outlines the differences between Gnocchi and timeseries-oriented databases (like InfluxDB).
+It goes over the features of InfluxDB that make it a good backend option for Gnocchi though, such
+as the downsampling and retention policies.</p></li>
+<li><p>The Gnocchi <a href="https://github.com/stackforge/gnocchi/tree/master/gnocchi">repository</a>.</p></li>
+</ul>
+
+
+<!-- more -->
+
+
+<p>Finally, I am also adding some old notes I made when first trying to understand the Gnocchi source code. I found it helpful to visually
+map out the filesystem structure (shown below) with comments on the different functional parts underneath.
+The diagram is not up to date and shows only the sections I was most familiar with.
+Although the comments below are rather simplistic and a bit embarrassing in retrospect,
+I thought I would post this in case a future OPW intern wants to know how other people
+approached their projects.</p>
+
+<pre><code>gnocchi/gnocchi/
+|--- carbonara.py
+|--- cli.py
+|--- indexer/
+|   |--- __init__.py
+|   |--- null.py
+|   |--- sqlalchemy.py
+|--- __init__.py
+|--- openstack/
+|--- rest/
+|   |--- app.py
+|   |--- __init__.py
+|--- service.py
+|--- storage/
+|   |--- __init__.py
+|   |--- null.py
+|   |--- swift.py
+|--- tests/
+|   |--- __init__.py
+|   |--- test_carbonara.py
+|   |--- test_indexer.py
+|   |--- test_rest.py
+|   |--- test_storage.py
+|--- gnocchi.egg-info
+|--- openstack-common.conf
+|--- README.rst
+|--- requirements.txt
+|--- run-mysql-tests.sh
+|--- run-postgresql-tests.sh
+|--- run-tests.sh
+|--- setup.cfg
+|--- setup.py
+</code></pre>
+
+<ul>
+<li><p>carbonara.py is the library that manipulates the timeseries. It is used in conjunction with the Swift storage driver.</p></li>
+<li><p>rest/ &ndash; I spent a lot of time here, mostly in the EntityController get_measures section of the init file, which
+has the code for evaluating HTTP requests to the API. The app.py file uses pecan magic to create hooks
+for the configured storage drivers and indexers. It also sets the default port for the API.</p></li>
+<li><p>storage/ &ndash; also looked at these files a lot when starting out. The driver-specific code is contained here. Eoghan Glynn added support for
+InfluxDB in this <a href="https://review.openstack.org/#/c/103329/">patch</a>; Dina Belova added OpenTSDB <a href="https://review.openstack.org/#/c/107986/">support</a>.
+As it was desirable to make the custom aggregation functions driver-independent, no changes were made to these files. However, it was useful
+to look at the InfluxDB patch to get a sense of the way aggregation was implemented using that backend.</p></li>
+<li><p>tests/ &ndash; The second most helpful thing in understanding the code (other than actually running the API and seeing query results, as well as logging intermediate steps in debug mode) was to look at the test cases.</p></li>
+<li><p>README.rst &ndash; I think this was my first contribution. Eoghan suggested it as a first step and it was a great way for getting my feet wet.</p></li>
+<li><p>setup.cfg &ndash; modify this file to add entry points for custom aggregation functions, storage drivers, and indexer options.</p></li>
+</ul>
+
+
+<p>That&rsquo;s all I have for comments on the Gnocchi source code &ndash; thanks for reading!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">A Malagon</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-14T13:33:23-04:00" pubdate data-updated="true">Sep 14<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/opw/'>OPW</a>, <a class='category' href='/blog/categories/openstack/'>Openstack</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/07/25/notes-on-stevedore/" title="Previous Post: Notes on Stevedore">&laquo; Notes on Stevedore</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/09/14/miscellaneous-on-gnocchi/">Miscellaneous Resources on Gnocchi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/25/notes-on-stevedore/">Notes on Stevedore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/09/options-for-period-spanning-statistics-in-gnocchi/">Options for Period-Spanning Statistics in Gnocchi</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/24/first-post/">first post</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/24/opw-project/">opw project</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 -  A Malagon <br/>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> + <a href="https://github.com/ioveracker/mnml">mnml</a>.
+	  
+  </span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
